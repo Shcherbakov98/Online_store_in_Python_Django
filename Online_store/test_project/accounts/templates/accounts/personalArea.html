@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap3 %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+            <h2 class="text-center">Личный кабинет</h2>
+            <ul class="order-context">
+               {% if user.is_authenticated %}
+
+                 <li> <a><strong>Пользователь: </strong>{{ user.get_username }}</a></li>
+                 <li><a><strong>Email: </strong>{{ user.email }}</a></li>
+                <li><a><strong>Телефон: </strong>{{ user.first_name }}</a></li>
+                <li><a href="{% url 'password_change' %}?next={{request.path}}">Изменить пароль</a></li>
+                 <li><a href="{% url 'logout'%}?next={{request.path}}">Выйти</a></li>
+
+               {% else %}
+                 <li><a href="{% url 'login' %}?next={{request.path}}">Войти</a></li>
+                 <li><a href="{% url 'register' %}?next={{request.path}}">Зарегистрироваться</a></li>
+               {% endif %}
+            </ul>
+
+            {% for v in productList %}
+                {{ v }}
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends  'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+{% if not user.is_authenticated %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+
+            <form method="post" class="horizontal" action="{% url 'login' %}">
+                <h1 class="text-center">Вход в систему</h1>
+                {% if form.errors %}
+                    <p class="login-errors">Имя пользователя или пароль введено не верно</p>
+                {% endif %}
+                {% csrf_token %}
+                <div class="login-in-block">
+                    <div class="form-row">
+                        <div class="form-group">
+
+                                <label class="login-label" >Логин: </label>
+                                <span  class="login-label">{{ form.username.errors }}</span>
+                                       {{ form.username }}
+
+                            </div>
+                        </div>
+                     <div class="form-row">
+                        <div class="form-group">
+
+                                <label class="login-label">Пароль: </label>
+                                <span class="login-label">{{ form.password.errors }}</span>
+                                      {{ form.password }}
+
+                            </div>
+                        </div>
+                </div>
+
+                        <input type="submit" value="Войти" class="btn btn-success btn-login-in" />
+
+                <div class="form-row btn-login">
+                    <div class="form-group">
+                            <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
+                            <p><a href="{% url 'register' %}">Зарегистрироваться</a></p>
+
+                     </div>
+                </div>
+                </form>
+
+                </div>
+        </div>
+    </div>
+
+
+{% else %}
+<h1 class="text-center">Вы уже авторизованы!</h1>
+{% endif %}
+
+{% endblock %}

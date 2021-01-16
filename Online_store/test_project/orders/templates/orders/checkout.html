@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+ {% if not user.is_authenticated %}
+    {% include 'includes/incCheckout.html' %}
+{% else %}
+    {% if products_in_basket %}
+    <div class="container">
+        <div class="row">
+            <!--<div class="col-lg-12">-->
+                <!--<h3 class="text-center checkout-head3">Личные данные</h3>-->
+            <!--</div>-->
+            <!--<div class="col-lg-6 col-lg-offset-3">-->
+                <!--<ul class="order-context">-->
+                     <!--<li> <a><strong>Пользователь: </strong>{{ user.get_username }}</a></li>-->
+                     <!--<li><a><strong>Email: </strong>{{ user.email }}</a></li>-->
+                     <!--<li><a><strong>Телефон: </strong>{{ user.first_name }}</a></li>-->
+                <!--</ul>-->
+            <!--</div>-->
+        <div class="col-lg-12">
+            <h3 class="text-center checkout-head3">Оформление заказа</h3>
+        </div>
+         <form method="post" id="modelWin">{% csrf_token %}
+             <div class="form row">
+                            <div class="col-lg-12 form-group">
+
+                                <div class="form-group col-md-4 sposov-delivery sposov-delivery-auth">
+
+                                    <label class="label-check label-check-auth">Способ доставки</label>
+                                    <div class="form-tem">
+                                        <div class="labe-input-check labe-input-check-auth">
+                                            <input type="radio" id="pickupgroup" name="radio_input_check" value="" class="form-radio pickupgroup" >
+                                            <label class="option" for="pickupgroup">Cамовывоз</label>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-tem">
+                                        <div class="labe-input-check labe-input-check-auth">
+                                            <input type="radio" id="couriergroup" name="radio_input_check" value="courier" class="form-radio couriergroup"  >
+                                            <label class="option"  for="couriergroup">Курьером</label>
+
+                                         </div>
+                                    </div>
+                                </div>
+
+
+
+                            <div class="form-group col-md-6 delivery-address-check delivery-address-check-auth hidden">
+                                    <label class="label-check label-check-address label-check-address-auth">Адресс доставки</label>
+                                    <input type="text" name="{{ form.address.html_name }}" class="form-control is-invalid fc-btn-check fc-btn-check-address fc-btn-check-address-auth"
+                                        value="{{ request.POST.address }}"
+                                    >
+
+                                        <label class="label-check label-check-comment label-check-comment-auth">Комментарий к доставке</label>
+                                        <textarea id="textarea" type="text" name="{{ form.comments.html_name }}" class="form-control fc-btn-check fc-btn-check-comment fc-btn-check-comment-auth"
+                                            value="{{ request.POST.comments }}"
+                                        ></textarea>
+                            </div>
+                        </div>
+
+                 </div>
+
+
+
+                        <div class="col-lg-8 col-lg-offset-2">
+
+                        <table class="table text-center table-checkout">
+                            <thead>
+                                <tr>
+                                    <th>Название товара</th>
+                                    <th>Количество</th>
+                                    <th>Цена за единицу</th>
+                                    <th>Общая цена</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product_in_basket in products_in_basket %}
+                                    <tr>
+                                        <td>
+                                             <a href="/product/{{ product_in_basket.product.id }}">{{ product_in_basket.product.name }} </a>
+                                        </td>
+                                        <td>
+                                             <input value="{{ product_in_basket.nmb }}" min="1" type="number"
+                                                    class="product-in-basket-nmb" name="product_in_basket_{{ product_in_basket.id }}">
+                                        </td>
+                                        <td>
+                                            <span class="product-price">
+                                                {{ product_in_basket.price_per_item}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="total-product-in-basket-amount">
+                                                {{ product_in_basket.total_price }}
+                                            </span>
+                                        </td>
+                                        <!--<td>-->
+
+                                            <!--<img src="{{ product_in_basket.product.image.url }}" class="img-responsive">-->
+
+                                        <!--</td>-->
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <div class="text-right">
+                            <b>Сумма заказа: </b> <span id="total_order_amount">54</span>
+                        </div>
+
+                        <hr>
+
+                        <div class="text-right">
+                           <button data-toggle="modal" data-target="#exampleModal" type="submit" id="check_btn" class="btn btn-primary btn-lg">Заказать</button>
+                        </div>
+                     </div>
+                    </form>
+           </div>
+
+        {% else %}
+                <h3 class="text-center">В вашей корзине нет товаров</h3>
+
+        {% endif %}
+    </div>
+
+
+ <!--Модальное окно №1
+   <a href="#x" class="overlay" id="win1"></a>
+   <div class="popup">
+     Здесь вы можете разместить любое содержание, текст с картинками или видео!
+    <a class="close" title="Закрыть" href="#close"></a>
+    </div>
+-->
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title text-center" id="exampleModalLabel">Спасибо за заказ!</h3>
+      </div>
+      <div class="modal-body">
+        <p class="text-center">Наши менеджеры, в ближайшее время, с вами свяжутся!</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

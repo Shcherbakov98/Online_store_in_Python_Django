@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap3 %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            {% if setDict %}
+            <h1 class="text-center">Найденые товары</h1>
+                <div class="col-lg-12">
+                    {% for product_image_obj in  products_images %}
+                        {% for product_image in product_image_obj %}
+                            {% include 'includes/product_item.html' %}
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="col-lg-12">
+                    <h1 class="text-center">По вашему запросу ничего не найдено.</h1>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
